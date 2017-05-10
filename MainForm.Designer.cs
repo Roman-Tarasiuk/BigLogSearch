@@ -1,6 +1,6 @@
 ﻿namespace BigLogSearch
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -103,7 +103,7 @@
             // 
             this.btnResultsToText.Location = new System.Drawing.Point(86, 142);
             this.btnResultsToText.Name = "btnResultsToText";
-            this.btnResultsToText.Size = new System.Drawing.Size(108, 23);
+            this.btnResultsToText.Size = new System.Drawing.Size(84, 23);
             this.btnResultsToText.TabIndex = 7;
             this.btnResultsToText.Text = "All to text area";
             this.btnResultsToText.UseVisualStyleBackColor = true;
@@ -111,11 +111,11 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(214, 142);
+            this.button4.Location = new System.Drawing.Point(188, 142);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(108, 23);
+            this.button4.Size = new System.Drawing.Size(84, 23);
             this.button4.TabIndex = 8;
-            this.button4.Text = "All to clipboard";
+            this.button4.Text = "All to file";
             this.button4.UseVisualStyleBackColor = true;
             // 
             // label3
@@ -148,12 +148,13 @@
             this.txtResults.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtResults.Size = new System.Drawing.Size(432, 208);
             this.txtResults.TabIndex = 11;
+            this.txtResults.TextChanged += new System.EventHandler(this.txtResults_TextChanged);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -169,7 +170,7 @@
             this.Controls.Add(this.btnSelectLogFile);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtLogPath);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Big Log Search";
             this.ResumeLayout(false);
             this.PerformLayout();
