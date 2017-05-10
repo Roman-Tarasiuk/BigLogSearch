@@ -21,7 +21,6 @@ namespace BigLogSearch
 
         string m_Log;
         Regex m_Re;
-        StringBuilder m_Result = new StringBuilder();
         Match m_Match;
         ILogger m_Logger;
 
@@ -49,25 +48,35 @@ namespace BigLogSearch
                 return;
             }
 
-            m_Logger.Log("Getting matches started.");
+            result = GetAllMatches();
 
-            do
-            {
-                result = GetNextMatch();
-                m_Logger.Log("Next match.");
-
-                if (result != null)
-                {
-                    m_Result.Append(result);
-                }
-            } while (result != null);
-
-            m_Logger.Log("All results found.");
+            m_Logger.Log("Result is ready.");
 
             m_Match = null;
 
-            txtResults.Text = m_Result.ToString();
+            txtResults.Text = result;
             m_Logger.Log("Results put to textarea.");
+        }
+
+        private void btnResultsToFile_Click(object sender, EventArgs e)
+        {
+            string result;
+
+            if (!GetRe())
+            {
+                MessageBox.Show("Regex is not specified.");
+                m_Logger.Log("Regex is not specified. Exit.");
+                return;
+            }
+
+            result = GetAllMatches();
+
+            m_Logger.Log("Result is ready.");
+
+            m_Match = null;
+
+            SaveToFile(result);
+            m_Logger.Log("Results saved to file.");
         }
 
         private void btnSelectLogFile_Click(object sender, EventArgs e)
@@ -78,14 +87,6 @@ namespace BigLogSearch
             {
                 txtLogPath.Text = openFileDialog1.FileName;
                 LoadLog();
-            }
-        }
-
-        private void txtResults_TextChanged(object sender, EventArgs e)
-        {
-            if (txtResults.Text == String.Empty)
-            {
-                m_Result.Clear();
             }
         }
 
@@ -110,7 +111,7 @@ namespace BigLogSearch
 
                         try
                         {
-                            using (StreamReader reader = new StreamReader(txtLogPath.Text))
+                            using (StreamReader reader = new StreamReader(txtLogPath.Text, Encoding.Unicode))
                             {
                                 m_Log = reader.ReadToEnd();
                                 m_Logger.Log("Log file successfully loaded.");
@@ -214,6 +215,53 @@ namespace BigLogSearch
             m_Re = new Regex(sbRe.ToString());
 
             return true;
+        }
+
+        private string GetAllMatches()
+        {
+            string result;
+            StringBuilder m_Result = new StringBuilder();
+
+            m_Logger.Log("Getting matches started.");
+
+            do
+            {
+                result = GetNextMatch();
+                m_Logger.Log("Next match.");
+
+                if (result != null)
+                {
+                    m_Result.Append(result);
+                }
+            } while (result != null);
+
+            m_Logger.Log("All results found.");
+
+            return m_Result.ToString();
+        }
+
+        private void SaveToFile(string info)
+        {
+            DialogResult dlgResult = saveFileDialog1.ShowDialog();
+
+            if (dlgResult == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName))
+                    {
+                        m_Logger.Log("Begin write to file.");
+
+                        writer.WriteLine(info);
+
+                        m_Logger.Log("Successfully write to file.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    m_Logger.Log("Error while saving to file: " + e.ToString());
+                }
+            }
         }
 
         #endregion

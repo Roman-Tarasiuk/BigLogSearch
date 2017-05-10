@@ -35,11 +35,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.btnResultsToText = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnResultsToFile = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.txtResultFormula = new System.Windows.Forms.TextBox();
             this.txtResults = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
             // txtLogPath
@@ -109,14 +110,15 @@
             this.btnResultsToText.UseVisualStyleBackColor = true;
             this.btnResultsToText.Click += new System.EventHandler(this.btnResultsToText_Click);
             // 
-            // button4
+            // btnResultsToFile
             // 
-            this.button4.Location = new System.Drawing.Point(188, 142);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(84, 23);
-            this.button4.TabIndex = 8;
-            this.button4.Text = "All to file";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnResultsToFile.Location = new System.Drawing.Point(188, 142);
+            this.btnResultsToFile.Name = "btnResultsToFile";
+            this.btnResultsToFile.Size = new System.Drawing.Size(84, 23);
+            this.btnResultsToFile.TabIndex = 8;
+            this.btnResultsToFile.Text = "All to file";
+            this.btnResultsToFile.UseVisualStyleBackColor = true;
+            this.btnResultsToFile.Click += new System.EventHandler(this.btnResultsToFile_Click);
             // 
             // label3
             // 
@@ -148,7 +150,6 @@
             this.txtResults.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtResults.Size = new System.Drawing.Size(432, 208);
             this.txtResults.TabIndex = 11;
-            this.txtResults.TextChanged += new System.EventHandler(this.txtResults_TextChanged);
             // 
             // openFileDialog1
             // 
@@ -162,7 +163,7 @@
             this.Controls.Add(this.txtResults);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtResultFormula);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.btnResultsToFile);
             this.Controls.Add(this.btnResultsToText);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.label2);
@@ -186,11 +187,12 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Button btnResultsToText;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnResultsToFile;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtResultFormula;
         private System.Windows.Forms.TextBox txtResults;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
