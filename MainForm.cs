@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Logging;
+using Model.Search;
+using Infrastructure.FileManager;
 
 namespace BigLogSearch
 {
@@ -19,16 +21,37 @@ namespace BigLogSearch
     {
         delegate void SetLabelDelegate(Label l, string text);
 
-        string m_Log;
-        Regex m_Re;
-        Match m_Match;
-        ILogger m_Logger;
+        #region Fields
+
+        private ILogger m_Logger;
+
+        private string m_LogData;
+
+        private FileManager m_FileManager;
+        private Searcher m_Searcher;
+
+        private Encoding m_Encoding = Encoding.Default;
+        private ToolStripMenuItem m_CurrentEncodingItem;
+
+        #endregion
+
+
+        #region Constructors
 
         public MainForm(ILogger logger)
         {
             InitializeComponent();
+
             m_Logger = logger;
+
+            m_FileManager = new FileManager(null, logger, Encoding.Default);
+            m_Searcher = new Searcher(null, null, logger);
+
+            BuildEncodingsMenu();
         }
+
+        #endregion
+
 
         #region Controls' event handlers
 
@@ -39,44 +62,33 @@ namespace BigLogSearch
 
         private void btnResultsToText_Click(object sender, EventArgs e)
         {
-            string result;
+            var results = GetResults();
 
-            if (!GetRe())
-            {
-                MessageBox.Show("Regex is not specified.");
-                m_Logger.Log("Regex is not specified. Exit.");
-                return;
-            }
-
-            result = GetAllMatches();
-
-            m_Logger.Log("Result is ready.");
-
-            m_Match = null;
-
-            txtResults.Text = result;
+            txtResults.Text = results;
             m_Logger.Log("Results put to textarea.");
         }
 
         private void btnResultsToFile_Click(object sender, EventArgs e)
         {
-            string result;
-
-            if (!GetRe())
+            string savePath = null;
+            DialogResult dlgResult = saveFileDialog1.ShowDialog();
+            if (dlgResult == DialogResult.OK)
             {
-                MessageBox.Show("Regex is not specified.");
-                m_Logger.Log("Regex is not specified. Exit.");
+                savePath = saveFileDialog1.FileName;
+                m_Logger.Log("Results file selected: " + savePath);
+            }
+            else
+            {
                 return;
             }
 
-            result = GetAllMatches();
+            var results = GetResults();
 
-            m_Logger.Log("Result is ready.");
-
-            m_Match = null;
-
-            SaveToFile(result);
-            m_Logger.Log("Results saved to file.");
+            var saved = SaveToFile(results, savePath);
+            if (saved)
+            {
+                m_Logger.Log("Results saved to file.");
+            }
         }
 
         private void btnSelectLogFile_Click(object sender, EventArgs e)
@@ -90,10 +102,95 @@ namespace BigLogSearch
             }
         }
 
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         #endregion
 
 
         #region Helper Methods
+
+        private void BuildEncodingsMenu()
+        {
+            var encodings = Encoding.GetEncodings();
+
+            var encodungGroupsNames = new string[] { "ibm", "windows", "x-mac", "x-", "iso-", "others" };
+            ToolStripMenuItem[] subItems = new ToolStripMenuItem[encodungGroupsNames.Length];
+
+            var i = 0;
+            foreach (var g in encodungGroupsNames)
+            {
+                subItems[i++] = (ToolStripMenuItem)encodingToolStripMenuItem.DropDownItems.Add(g);
+            }
+
+            foreach (var e in encodings)
+            {
+                var index = GetEncodingGroupIndex(e.Name, encodungGroupsNames);
+
+                subItems[index].DropDownItems.Add(e.Name);
+                var count = subItems[index].DropDownItems.Count;
+                subItems[index].DropDownItems[count - 1].Click += OnEncodingSelected;
+            }
+
+            foreach (var s in subItems)
+            {
+                ResortToolStripItemCollection(s.DropDownItems);
+            }
+        }
+
+        private int GetEncodingGroupIndex(string encodingName, string[] groupNames)
+        {
+            for (int i = 0; i <= groupNames.Length - 2; i++)
+            {
+                if (encodingName.ToLower().StartsWith(groupNames[i].ToLower()))
+                {
+                    return i;
+                }
+            }
+
+            return groupNames.Length - 1;
+        }
+
+        private void OnEncodingSelected(object sender, EventArgs e)
+        {
+            var item = (ToolStripMenuItem)sender;
+
+            if (m_CurrentEncodingItem != null)
+            {
+                m_CurrentEncodingItem.Checked = false;
+            }
+
+            m_Encoding = Encoding.GetEncoding(item.Text);
+            item.Checked = true;
+            m_CurrentEncodingItem = item;
+        }
+
+        // next 2 methods – http://stackoverflow.com//questions/5102205/how-to-sort-items-in-toolstripitemcollection
+        //
+        private void ResortToolStripItemCollection(ToolStripItemCollection coll)
+        {
+            System.Collections.ArrayList oAList = new System.Collections.ArrayList(coll);
+            oAList.Sort(new ToolStripItemComparer());
+            coll.Clear();
+
+            foreach (ToolStripItem oItem in oAList)
+            {
+                coll.Add(oItem);
+            }
+        }
+
+        public class ToolStripItemComparer : System.Collections.IComparer
+        {
+            public int Compare(object x, object y)
+            {
+                ToolStripItem oItem1 = (ToolStripItem)x;
+                ToolStripItem oItem2 = (ToolStripItem)y;
+                //return string.Compare(oItem1.Text, oItem2.Text, StringComparison.Ordinal);
+                return string.Compare(oItem1.Text, oItem2.Text, true);
+            }
+        }
 
         private void LoadLog()
         {
@@ -103,7 +200,7 @@ namespace BigLogSearch
                 (
                     () =>
                     {
-                        m_Logger.Log("Trying to load log file...");
+                        m_Logger.Log("Trying to load log file: " + txtLogPath.Text);
 
                         SetLabel(lblStatus, "Loading...");
 
@@ -111,27 +208,47 @@ namespace BigLogSearch
 
                         try
                         {
-                            using (StreamReader reader = new StreamReader(txtLogPath.Text, Encoding.Unicode))
-                            {
-                                m_Log = reader.ReadToEnd();
-                                m_Logger.Log("Log file successfully loaded.");
-                            }
+                            m_LogData = m_FileManager.Load(txtLogPath.Text, m_Encoding);
                         }
                         catch (Exception)
                         {
-                            MessageBox.Show("Error while reading from the specified file.");
                             m_Logger.Log("Error while reading from the specified file.");
                             SetLabel(lblStatus, "...");
+                            MessageBox.Show("Error while reading from the specified file.");
                             return;
                         }
 
                         string timeStr = GetTimeStr(begin, DateTime.Now);
                         string sizeStr = GetSizeStr(txtLogPath.Text);
 
+                        m_Logger.Log("Log file successfully loaded (" + sizeStr + " in " + timeStr + ").");
                         SetLabel(lblStatus, "Loaded successfully (" + sizeStr + " in " + timeStr + ").");
                     }
                 )
             ).Start();
+        }
+
+        private bool SaveToFile(string info, string path)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName))
+                {
+                    m_Logger.Log("Begin write to file...");
+
+                    writer.WriteLine(info);
+
+                    m_Logger.Log("Successfully written to file.");
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                m_Logger.Log("Error while saving to file: " + e.ToString());
+            }
+
+            return false;
         }
 
         private static string GetTimeStr(DateTime begin, DateTime end)
@@ -169,99 +286,24 @@ namespace BigLogSearch
             }
         }
 
-        private string GetNextMatch()
-        {
-            StringBuilder sbFormula = new StringBuilder(txtResultFormula.Text);
-            sbFormula.Replace("\\r", "\r")
-                .Replace("\\n", "\n")
-                .Replace("\\t", "\t");
-
-            var formula = sbFormula.ToString();
-
-            StringBuilder result = new StringBuilder();
-
-            if (m_Match == null)
-            {
-                m_Logger.Log("Creating new match...");
-                m_Match = m_Re.Match(m_Log);
-            }
-            else
-            {
-                if (m_Match.Success)
-                {
-                    m_Match = m_Match.NextMatch();
-                }
-                else
-                {
-                    m_Match = Match.Empty;
-                }
-            }
-            
-            return m_Match != Match.Empty ? m_Match.Value + formula : null;
-        }
-
-        private bool GetRe()
-        {
-            if (txtRegex.Text == string.Empty)
-            {
-                return false;
-            }
-
-            StringBuilder sbRe = new StringBuilder(txtRegex.Text);
-            sbRe.Replace("\\r", "\r")
-                .Replace("\\n", "\n")
-                .Replace("\\t", "\t");
-
-            m_Re = new Regex(sbRe.ToString());
-
-            return true;
-        }
-
-        private string GetAllMatches()
+        private string GetResults()
         {
             string result;
-            StringBuilder m_Result = new StringBuilder();
 
-            m_Logger.Log("Getting matches started.");
-
-            do
+            if (txtRegex.Text == string.Empty)
             {
-                result = GetNextMatch();
-                m_Logger.Log("Next match.");
-
-                if (result != null)
-                {
-                    m_Result.Append(result);
-                }
-            } while (result != null);
-
-            m_Logger.Log("All results found.");
-
-            return m_Result.ToString();
-        }
-
-        private void SaveToFile(string info)
-        {
-            DialogResult dlgResult = saveFileDialog1.ShowDialog();
-
-            if (dlgResult == DialogResult.OK)
-            {
-                try
-                {
-                    using (StreamWriter writer = new StreamWriter(saveFileDialog1.FileName))
-                    {
-                        m_Logger.Log("Begin write to file.");
-
-                        writer.WriteLine(info);
-
-                        m_Logger.Log("Successfully write to file.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    m_Logger.Log("Error while saving to file: " + e.ToString());
-                }
+                MessageBox.Show("Regex is not specified.");
+                m_Logger.Log("Regex is not specified. Exit.");
+                return null;
             }
+
+            m_LogData = m_FileManager.Load(txtLogPath.Text, m_Encoding);
+            m_Searcher.Reset(m_LogData, txtRegex.Text, m_Logger);
+            result = m_Searcher.GetAllMatches();
+
+            m_Logger.Log("Results are ready.");
+
+            return result;
         }
 
         #endregion

@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Microsoft.Practices.Unity;
-using Logging;
-using LogToFile;
-using LogToConsole;
+//using Logging;
+//using LogToFile;
+//using LogToConsole;
+using Microsoft.Practices.Unity.Configuration;
 
 namespace BigLogSearch
 {
@@ -20,7 +21,8 @@ namespace BigLogSearch
         static void Main()
         {
             var container = new UnityContainer();
-            container.RegisterType<ILogger, LogToConsole.Logger>();
+            //container.RegisterType<ILogger, LogToConsole.Logger>();
+            container.LoadConfiguration();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
