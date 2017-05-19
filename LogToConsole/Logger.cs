@@ -12,7 +12,7 @@ namespace LogToConsole
     {
         public bool Log(string info)
         {
-            Console.WriteLine(string.Format("{0:dd.mm.yyyy hh:mm:ss.ffff}\t{1}", DateTime.Now, info));
+            Console.WriteLine(string.Format("{0:dd.MM.yyyy HH:mm:ss.ffff}\t{1}", DateTime.Now, info));
 
             return true;
         }

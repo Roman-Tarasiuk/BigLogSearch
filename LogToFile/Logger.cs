@@ -24,7 +24,7 @@ namespace LogToFile
             {
                 using (StreamWriter writer = new StreamWriter(m_Path, true))
                 {
-                    writer.WriteLine(string.Format("{0:dd.mm.yyyy hh:mm:ss.ffff}\t{1}", DateTime.Now, info));
+                    writer.WriteLine(string.Format("{0:dd.MM.yyyy HH:mm:ss.ffff}\t{1}", DateTime.Now, info));
                 }
             }
             catch (Exception exception)
