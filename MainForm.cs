@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using Logging;
+using Infrastructure.Logger;
 using Model.Search;
 using Infrastructure.FileManager;
 
@@ -63,9 +63,15 @@ namespace BigLogSearch
         private void btnResultsToText_Click(object sender, EventArgs e)
         {
             var results = GetResults();
+            if (results == null)
+            {
+                return;
+            }
 
             txtResults.Text = results;
             m_Logger.Log("Results put to textarea.");
+
+            MessageBox.Show("Results put to textarea.");
         }
 
         private void btnResultsToFile_Click(object sender, EventArgs e)
@@ -83,11 +89,20 @@ namespace BigLogSearch
             }
 
             var results = GetResults();
+            if (results == null)
+            {
+                return;
+            }
 
             var saved = SaveToFile(results, savePath);
             if (saved)
             {
                 m_Logger.Log("Results saved to file.");
+                MessageBox.Show("Results saved to file.");
+            }
+            else
+            {
+                MessageBox.Show("An error occured while saving to file.");
             }
         }
 

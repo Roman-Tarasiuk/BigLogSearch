@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.IO;
-using Logging;
+using Infrastructure.Logger;
 
-namespace LogToFile
+namespace Infrastructure.LogToFile
 {
     public class Logger : ILogger
     {

@@ -5,17 +5,19 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigLogSearch.WindowsForms", "BigLogSearch.WindowsForms.csproj", "{1F86F338-300F-483B-9514-1871589DD99E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.LogToFile", "LogToFile\Infrastructure.LogToFile.csproj", "{CC375375-8FAE-4479-8BF9-90B691B158D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.LogToFile", "Infrastructure.LogToFile\Infrastructure.LogToFile.csproj", "{CC375375-8FAE-4479-8BF9-90B691B158D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.LogToConsole", "LogToConsole\Infrastructure.LogToConsole.csproj", "{3B346896-A060-4326-8DA4-DF7357BC91CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.LogToConsole", "Infrastructure.LogToConsole\Infrastructure.LogToConsole.csproj", "{3B346896-A060-4326-8DA4-DF7357BC91CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Logger", "Logger\Infrastructure.Logger.csproj", "{9AC8B72E-8101-4DFC-A891-D21A7B1469FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Logger", "Infrastructure.Logger\Infrastructure.Logger.csproj", "{9AC8B72E-8101-4DFC-A891-D21A7B1469FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.Search", "..\Model.Search\Model.Search.csproj", "{6982B9BC-F7C1-4719-A87D-1B43AFB8F71C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest.Model.Search", "UnitTest.Model.Search\UnitTest.Model.Search.csproj", "{8E848B37-C833-4B87-977F-58A7E5616452}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.FileManager", "Infrastructure.FileManager\Infrastructure.FileManager.csproj", "{5665DD40-8247-4250-AD32-B1B284F1625D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.LogNoLog", "Infrastructure.LogNoLog\Infrastructure.LogNoLog.csproj", "{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +143,22 @@ Global
 		{5665DD40-8247-4250-AD32-B1B284F1625D}.Release|x64.Build.0 = Release|Any CPU
 		{5665DD40-8247-4250-AD32-B1B284F1625D}.Release|x86.ActiveCfg = Release|Any CPU
 		{5665DD40-8247-4250-AD32-B1B284F1625D}.Release|x86.Build.0 = Release|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Debug|ARM.Build.0 = Debug|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Debug|x64.Build.0 = Debug|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Debug|x86.Build.0 = Debug|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Release|ARM.ActiveCfg = Release|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Release|ARM.Build.0 = Release|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Release|x64.ActiveCfg = Release|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Release|x64.Build.0 = Release|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Release|x86.ActiveCfg = Release|Any CPU
+		{422BFAF8-F826-4DBA-B0CF-F39810E4CE31}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

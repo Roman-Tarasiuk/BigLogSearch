@@ -7,8 +7,8 @@
     <ProjectGuid>{CC375375-8FAE-4479-8BF9-90B691B158D5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LogToFile</RootNamespace>
-    <AssemblyName>LogToFile</AssemblyName>
+    <RootNamespace>Infrastructure.LogToFile</RootNamespace>
+    <AssemblyName>Infrastructure.LogToFile</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -46,7 +46,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logger\Infrastructure.Logger.csproj">
+    <ProjectReference Include="..\Infrastructure.Logger\Infrastructure.Logger.csproj">
       <Project>{9ac8b72e-8101-4dfc-a891-d21a7b1469fa}</Project>
       <Name>Infrastructure.Logger</Name>
     </ProjectReference>

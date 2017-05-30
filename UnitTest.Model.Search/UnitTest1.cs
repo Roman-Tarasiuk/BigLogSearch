@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model.Search;
 
 using Moq;
-using Logging;
+using Infrastructure.Logger;
 
 namespace UnitTest.Model.Search
 {

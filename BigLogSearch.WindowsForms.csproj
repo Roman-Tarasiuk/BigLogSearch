@@ -97,7 +97,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model.Search\Model.Search.csproj">
@@ -108,15 +110,19 @@
       <Project>{5665dd40-8247-4250-ad32-b1b284f1625d}</Project>
       <Name>Infrastructure.FileManager</Name>
     </ProjectReference>
-    <ProjectReference Include="Logger\Infrastructure.Logger.csproj">
+    <ProjectReference Include="Infrastructure.Logger\Infrastructure.Logger.csproj">
       <Project>{9ac8b72e-8101-4dfc-a891-d21a7b1469fa}</Project>
       <Name>Infrastructure.Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="LogToConsole\Infrastructure.LogToConsole.csproj">
+    <ProjectReference Include="Infrastructure.LogNoLog\Infrastructure.LogNoLog.csproj">
+      <Project>{422bfaf8-f826-4dba-b0cf-f39810e4ce31}</Project>
+      <Name>Infrastructure.LogNoLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="Infrastructure.LogToConsole\Infrastructure.LogToConsole.csproj">
       <Project>{3b346896-a060-4326-8da4-df7357bc91ca}</Project>
       <Name>Infrastructure.LogToConsole</Name>
     </ProjectReference>
-    <ProjectReference Include="LogToFile\Infrastructure.LogToFile.csproj">
+    <ProjectReference Include="Infrastructure.LogToFile\Infrastructure.LogToFile.csproj">
       <Project>{cc375375-8fae-4479-8bf9-90b691b158d5}</Project>
       <Name>Infrastructure.LogToFile</Name>
     </ProjectReference>
