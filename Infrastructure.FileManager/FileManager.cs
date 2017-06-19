@@ -111,7 +111,7 @@ namespace Infrastructure.FileManager
             }
             else
             {
-                m_Logger.Log(LogPrefix + "data already loaded (log file has'n changed after last reading).");
+                m_Logger.Log(LogPrefix + "data already loaded (the file hasn't changed after last reading).");
             }
 
             return m_Data;

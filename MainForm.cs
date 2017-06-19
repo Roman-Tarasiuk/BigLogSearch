@@ -25,7 +25,7 @@ namespace BigLogSearch
 
         private ILogger m_Logger;
 
-        private string m_LogData;
+        private string m_InputData;
 
         private FileManager m_FileManager;
         private Searcher m_Searcher;
@@ -215,7 +215,7 @@ namespace BigLogSearch
                 (
                     () =>
                     {
-                        m_Logger.Log("Trying to load log file: " + txtLogPath.Text);
+                        m_Logger.Log("Trying to load file: " + txtLogPath.Text);
 
                         SetLabel(lblStatus, "Loading...");
 
@@ -223,7 +223,7 @@ namespace BigLogSearch
 
                         try
                         {
-                            m_LogData = m_FileManager.Load(txtLogPath.Text, m_Encoding);
+                            m_InputData = m_FileManager.Load(txtLogPath.Text, m_Encoding);
                         }
                         catch (Exception)
                         {
@@ -236,7 +236,7 @@ namespace BigLogSearch
                         string timeStr = GetTimeStr(begin, DateTime.Now);
                         string sizeStr = GetSizeStr(txtLogPath.Text);
 
-                        m_Logger.Log("Log file successfully loaded (" + sizeStr + " in " + timeStr + ").");
+                        m_Logger.Log("File successfully loaded (" + sizeStr + " in " + timeStr + ").");
                         SetLabel(lblStatus, "Loaded successfully (" + sizeStr + " in " + timeStr + ").");
                     }
                 )
@@ -307,13 +307,13 @@ namespace BigLogSearch
 
             if (txtRegex.Text == string.Empty)
             {
-                MessageBox.Show("Regex is not specified.");
                 m_Logger.Log("Regex is not specified. Exit.");
                 return null;
             }
 
-            m_LogData = m_FileManager.Load(txtLogPath.Text, m_Encoding);
-            m_Searcher.Reset(m_LogData, txtRegex.Text, m_Logger);
+            m_InputData = m_FileManager.Load(txtLogPath.Text, m_Encoding);
+            m_Searcher.Reset(m_InputData, txtRegex.Text, m_Logger);
+
             result = m_Searcher.GetAllMatches();
 
             m_Logger.Log("Results are ready.");
